@@ -1,7 +1,7 @@
-import Page from '../components/page'
+import Page from "../components/page";
 
 export default function SSG() {
-  return <Page />
+  return <Page />;
 }
 
 // If you build and start the app, the date returned here will have the same
@@ -16,5 +16,5 @@ export function getStaticProps() {
         light: false,
       },
     },
-  }
+  };
 }

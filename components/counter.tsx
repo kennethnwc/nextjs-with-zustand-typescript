@@ -1,5 +1,5 @@
-import { useStore } from '../lib/store'
-import shallow from 'zustand/shallow'
+import { useStore } from "../lib/store";
+import shallow from "zustand/shallow";
 const useCounter = () => {
   const { count, increment, decrement, reset } = useStore(
     (store) => ({
@@ -9,13 +9,13 @@ const useCounter = () => {
       reset: store.reset,
     }),
     shallow
-  )
+  );
 
-  return { count, increment, decrement, reset }
-}
+  return { count, increment, decrement, reset };
+};
 
 const Counter = () => {
-  const { count, increment, decrement, reset } = useCounter()
+  const { count, increment, decrement, reset } = useCounter();
   return (
     <div>
       <h1>
@@ -25,7 +25,7 @@ const Counter = () => {
       <button onClick={decrement}>-1</button>
       <button onClick={reset}>Reset</button>
     </div>
-  )
-}
+  );
+};
 
-export default Counter
+export default Counter;
