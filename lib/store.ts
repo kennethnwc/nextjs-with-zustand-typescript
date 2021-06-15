@@ -3,7 +3,7 @@ import create, { UseStore } from "zustand";
 import createContext from "zustand/context";
 import { combine } from "zustand/middleware";
 
-let store: any;
+let store: UseStoreType | undefined;
 
 type InitialState = typeof initialState;
 type UseStoreType = ReturnType<typeof initializeStore>;
@@ -55,7 +55,7 @@ export const initializeStore = (preloadedState = {}) => {
 };
 
 export function useHydrate(initialState: InitialState) {
-  let _store: UseStoreType = store ?? initializeStore(initialState);
+  let _store = store ?? initializeStore(initialState);
 
   // For SSR & SSG, always use a new store.
   if (typeof window !== "undefined") {
