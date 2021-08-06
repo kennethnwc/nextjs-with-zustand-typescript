@@ -1,10 +1,10 @@
-import { useHydrate, Provider } from "../lib/store";
+import { useCreateStore, Provider } from "../lib/store";
 import { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const store = useHydrate(pageProps.initialZustandState);
+  const createStore = useCreateStore(pageProps.initialZustandState);
   return (
-    <Provider initialStore={store as any}>
+    <Provider createStore={createStore}>
       <Component {...pageProps} />
     </Provider>
   );
