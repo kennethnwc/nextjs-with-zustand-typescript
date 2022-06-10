@@ -22,4 +22,6 @@ Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packag
 
 ```bash
 git clone
+yarn
+yarn dev
 ```
