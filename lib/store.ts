@@ -1,22 +1,22 @@
 import { useLayoutEffect } from "react";
-import create, { UseStore } from "zustand";
+import create, { UseBoundStore } from "zustand";
 import createContext from "zustand/context";
 import { combine } from "zustand/middleware";
 
 let store: any;
 
-type InitialState = typeof initialState;
+type InitialState = ReturnType<typeof getDefaultInitialState>;
 type UseStoreState = typeof initializeStore extends (
   ...args: never
-) => UseStore<infer T>
+) => UseBoundStore<infer T>
   ? T
   : never;
 
-const initialState = {
-  lastUpdate: 0,
+const getDefaultInitialState = () => ({
+  lastUpdate: Date.now(),
   light: false,
   count: 0,
-};
+});
 
 const zustandContext = createContext<UseStoreState>();
 export const Provider = zustandContext.Provider;
@@ -24,7 +24,7 @@ export const useStore = zustandContext.useStore;
 
 export const initializeStore = (preloadedState = {}) => {
   return create(
-    combine({ ...initialState, ...preloadedState }, (set, get) => ({
+    combine({ ...getDefaultInitialState(), ...preloadedState }, (set, get) => ({
       reset2: () => {
         set({ count: 100 });
       },
@@ -46,34 +46,43 @@ export const initializeStore = (preloadedState = {}) => {
       },
       reset: () => {
         set({
-          count: initialState.count,
+          count: getDefaultInitialState().count,
         });
       },
     }))
   );
 };
 
-export const useCreateStore = (initialState: InitialState) => {
+export const useCreateStore = (serverInitialState: InitialState) => {
   // For SSR & SSG, always use a new store.
   if (typeof window === "undefined") {
-    return () => initializeStore(initialState);
+    return () => initializeStore(serverInitialState);
   }
 
+  const isReusingStore = Boolean(store);
   // For CSR, always re-use same store.
-  store = store ?? initializeStore(initialState);
+  store = store ?? initializeStore(serverInitialState);
   // And if initialState changes, then merge states in the next render cycle.
   //
   // eslint complaining "React Hooks must be called in the exact same order in every component render"
   // is ignorable as this code runs in same order in a given environment
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useLayoutEffect(() => {
-    if (initialState && store) {
-      store.setState({
-        ...store.getState(),
-        ...initialState,
-      });
+    // serverInitialState is undefined for CSR pages. It is up to you if you want to reset
+    // states on CSR page navigation or not. I have chosen not to, but if you choose to,
+    // then add `serverInitialState = getDefaultInitialState()` here.
+    if (serverInitialState && isReusingStore) {
+      store.setState(
+        {
+          // re-use functions from existing store
+          ...store.getState(),
+          // but reset all other properties.
+          ...serverInitialState,
+        },
+        true // replace states, rather than shallow merging
+      );
     }
-  }, [initialState]);
+  });
 
   return () => store;
 };
