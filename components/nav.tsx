@@ -1,17 +1,11 @@
-import Link from 'next/link'
+import Link from "next/link";
 
 const Nav = () => {
   return (
     <nav>
-      <Link href="/">
-        <a>Index</a>
-      </Link>
-      <Link href="/ssg">
-        <a>SSG</a>
-      </Link>
-      <Link href="/ssr">
-        <a>SSR</a>
-      </Link>
+      <Link href="/">Index</Link>
+      <Link href="/ssg">SSG</Link>
+      <Link href="/ssr">SSR</Link>
       <style jsx>
         {`
           a {
@@ -20,7 +14,7 @@ const Nav = () => {
         `}
       </style>
     </nav>
-  )
-}
+  );
+};
 
-export default Nav
+export default Nav;
