@@ -1,6 +1,7 @@
 # Zustand example with Typescript
 
 This example shows how to integrate Zustand in Next.js with typescript.
+You dont need to manually define StoreInterface. It will get infer by the combine function from zustand.
 It helps to auto suggest what states are in store. When it comes to big project, Typescript really helps
 It is modified from original js version https://github.com/vercel/next.js/tree/master/examples/with-zustand
 
