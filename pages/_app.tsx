@@ -1,11 +1,10 @@
-import { useCreateStore, Provider } from "../lib/store";
 import { AppProps } from "next/app";
+import { StoreProvider } from "../lib/StoreProvider";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const createStore = useCreateStore(pageProps.initialZustandState);
   return (
-    <Provider createStore={createStore}>
+    <StoreProvider {...pageProps.initialZustandState}>
       <Component {...pageProps} />
-    </Provider>
+    </StoreProvider>
   );
 }
